@@ -1,0 +1,62 @@
+:root {
+  /* ---- Palette: drawn from a saree's own palette — deep aubergine silk, ---- */
+  /* ---- kanjivaram maroon, zari gold thread, and unbleached ivory cloth  ---- */
+  --ink: #211320;
+  --ink-2: #2c1b2e;
+  --ink-3: #392640;
+  --ink-line: #46304c;
+
+  --gold: #c79a4b;
+  --gold-soft: #e8d5a8;
+  --gold-dim: #a97f37;
+
+  --maroon: #8c2a3b;
+  --maroon-soft: #f3e3e0;
+
+  --ivory: #faf6ef;
+  --surface: #ffffff;
+  --surface-sunk: #f4efe4;
+  --line: #ece3d6;
+  --line-strong: #ddcfb8;
+
+  --text: #2a1f28;
+  --text-muted: #8d7e88;
+  --text-faint: #b3a6ad;
+  --text-on-ink: #f3ece4;
+  --text-on-ink-muted: #b5a2b8;
+
+  --success: #3f7a55;
+  --success-soft: #e4efe6;
+  --warning: #b9862f;
+  --warning-soft: #f6ecd9;
+  --danger: #b23a48;
+  --danger-soft: #f6e2e3;
+  --info: #4c6e8c;
+  --info-soft: #e4ecf1;
+
+  /* ---- Type ---- */
+  --font-display: "Fraunces", "Iowan Old Style", serif;
+  --font-body: "Work Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", "SF Mono", monospace;
+
+  /* ---- Layout ---- */
+  --sidebar-w: 248px;
+  --topbar-h: 68px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --shadow-sm: 0 1px 2px rgba(33, 19, 32, 0.06);
+  --shadow-md: 0 8px 24px rgba(33, 19, 32, 0.08);
+  --shadow-lg: 0 16px 40px rgba(33, 19, 32, 0.14);
+
+  /* Signature: a "zari" thread border — repeating diamond ticks in gold,
+     used as a structural rule across cards, tables and the topbar to
+     evoke a saree's woven border rather than a decorative flourish. */
+  --zari-border: repeating-linear-gradient(
+    90deg,
+    var(--gold) 0px,
+    var(--gold) 6px,
+    transparent 6px,
+    transparent 13px
+  );
+}
