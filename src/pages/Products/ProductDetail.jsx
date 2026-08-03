@@ -119,6 +119,7 @@ export default function ProductDetail() {
     const displayPrice = selectedAttribute?.price || product.price;
     const displayOfferPrice = selectedAttribute?.offerPrice || product.offerPrice;
     const displayDiscount = selectedAttribute?.discount || product.discount;
+    const displayQuantity = selectedAttribute?.quantity ?? 0;
 
     // 🏷️ Get attributes to display based on collection
     const attributeFields = getAttributeFields(product.collection);
@@ -218,13 +219,13 @@ export default function ProductDetail() {
                         <div className="product-detail-stock">
                             <span className="product-detail-label">Stock Status</span>
                             <div className="product-detail-stock-display">
-                                {product.quantity > 0 ? (
+                                {displayQuantity > 0 ? (
                                     <>
                                         <div className="product-detail-stock-badge in-stock">
                                             <IconCheck />
                                             In Stock
                                         </div>
-                                        <span className="product-detail-stock-count">{product.quantity} available</span>
+                                        <span className="product-detail-stock-count">{displayQuantity} available</span>
                                     </>
                                 ) : (
                                     <div className="product-detail-stock-badge out-of-stock">Out of Stock</div>
