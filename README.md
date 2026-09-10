@@ -1,4 +1,4 @@
-# Boutique Admin — Sarees E‑commerce Admin Panel
+# Lavanya Trends Admin — Sarees E‑commerce Admin Panel
 
 A full admin dashboard for the `sarees-ecommerce-api` backend. Built with
 plain React + React Router + hand-written CSS — no Tailwind, no Bootstrap,

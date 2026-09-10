@@ -61,7 +61,7 @@ export default function Login() {
             <circle cx="17" cy="17" r="17" fill="var(--ink)" />
             <path d="M17 7c4.5 4.3 6.8 8.3 6.8 11.3a6.8 6.8 0 1 1-13.6 0C10.2 15.3 12.5 11.3 17 7z" fill="var(--gold)" />
           </svg>
-          <h1>Sign in to Boutique</h1>
+          <h1>Sign in to Lavanya Trends</h1>
           <p className="sub">Enter your admin credentials to continue.</p>
 
           {error && <div className="login-error">{error}</div>}

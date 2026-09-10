@@ -63,7 +63,7 @@ export default function Sidebar() {
       <div className="sidebar-brand">
         <BrandMark className="sidebar-mark" />
         <div className="sidebar-brand-text">
-          <span className="name">Boutique</span>
+          <span className="name">Lavanya Trends</span>
           <span className="tag">Sarees Admin</span>
         </div>
         <button className="sidebar-close" title="Close menu" onClick={close}>
