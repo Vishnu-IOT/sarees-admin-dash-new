@@ -3,7 +3,7 @@ import axios from 'axios';
 // Points at the sarees-ecommerce-api backend. Configure in .env as
 // VITE_API_BASE_URL (see .env.example). Falls back to localhost:5002
 // for local development against the backend in this repo.
-const baseURL = import.meta.env.VITE_API_BASE_URL || 'https://sarees-backend-9wq0.onrender.com';
+const baseURL = import.meta.env.VITE_API_BASE_URL || 'https://mediumorchid-rhinoceros-818505.hostingersite.com';
 
 const client = axios.create({
   baseURL,
