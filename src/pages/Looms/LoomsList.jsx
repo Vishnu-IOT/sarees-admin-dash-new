@@ -104,7 +104,7 @@ export default function LoomsList() {
                       <td>
                         <div className="cell-primary">{loom.name}</div>
                       </td>
-                      <td className="cell-mono">{loom.sku}</td>
+                      <td className="cell-mono">{loom.attributes[0].sku}</td>
                       <td><Badge value={loom.status === 'active' ? 'active' : 'inactive'} label={loom.status === 'active' ? 'Active' : 'Inactive'} /></td>
                       <td>
                         <div className="row-actions">

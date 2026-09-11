@@ -55,10 +55,10 @@ export default function CategoryForm({ category, onClose, onSaved }) {
           <input value={form.name} onChange={(e) => update('name', e.target.value)} placeholder="e.g. Silk Sarees" />
           {errors.name && <span className="field-error">{errors.name}</span>}
         </div>
-        <div className="field">
+        {/* <div className="field">
           <label>Description</label>
           <textarea value={form.description} onChange={(e) => update('description', e.target.value)} placeholder="Short description shown to customers" />
-        </div>
+        </div> */}
         <div className={`field${errors.collection ? ' has-error' : ''}`}>
           <label>Collection</label>
           <select
@@ -74,10 +74,10 @@ export default function CategoryForm({ category, onClose, onSaved }) {
             <span className="field-error">{errors.collection}</span>
           )}
         </div>
-        <div className="field">
+        {/* <div className="field">
           <label>Image URL</label>
           <input value={form.image} onChange={(e) => update('image', e.target.value)} placeholder="https://…" />
-        </div>
+        </div> */}
         <div className="field">
           <div className="checkbox-row">
             <input

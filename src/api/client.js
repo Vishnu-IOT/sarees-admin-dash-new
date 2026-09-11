@@ -4,6 +4,7 @@ import axios from 'axios';
 // VITE_API_BASE_URL (see .env.example). Falls back to localhost:5002
 // for local development against the backend in this repo.
 const baseURL = import.meta.env.VITE_API_BASE_URL || 'https://mediumorchid-rhinoceros-818505.hostingersite.com';
+// const baseURL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5002/';
 
 const client = axios.create({
   baseURL,

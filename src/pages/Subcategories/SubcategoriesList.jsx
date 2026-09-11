@@ -1,14 +1,22 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import Topbar from '../../components/Topbar.jsx';
-import Badge from '../../components/Badge.jsx';
-import Pagination from '../../components/Pagination.jsx';
-import ConfirmDialog from '../../components/ConfirmDialog.jsx';
-import { Loader, EmptyState } from '../../components/Loader.jsx';
-import SubcategoryForm from './SubcategoryForm.jsx';
-import { subcategoriesApi } from '../../api/subcategories';
-import { categoriesApi } from '../../api/categories';
-import { useToast } from '../../context/ToastContext.jsx';
-import { IconPlus, IconEdit, IconTrash, IconLayers } from '../../components/icons.jsx';
+import React, { useCallback, useEffect, useState } from "react";
+import Topbar from "../../components/Topbar.jsx";
+import Badge from "../../components/Badge.jsx";
+import Pagination from "../../components/Pagination.jsx";
+import ConfirmDialog from "../../components/ConfirmDialog.jsx";
+import { Loader, EmptyState } from "../../components/Loader.jsx";
+import SubcategoryForm from "./SubcategoryForm.jsx";
+import {
+  subcategoriesApi,
+  updateSubCategoryStatus,
+} from "../../api/subcategories";
+import { categoriesApi } from "../../api/categories";
+import { useToast } from "../../context/ToastContext.jsx";
+import {
+  IconPlus,
+  IconEdit,
+  IconTrash,
+  IconLayers,
+} from "../../components/icons.jsx";
 
 export default function SubcategoriesList() {
   const toast = useToast();
@@ -16,9 +24,9 @@ export default function SubcategoriesList() {
   const [categories, setCategories] = useState([]);
   const [pagination, setPagination] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
-  const [categoryId, setCategoryId] = useState('');
+  const [categoryId, setCategoryId] = useState("");
   const [editing, setEditing] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [deleting, setDeleting] = useState(null);
@@ -40,7 +48,10 @@ export default function SubcategoriesList() {
   }, [page, categoryId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    categoriesApi.list({ limit: 200 }).then((res) => setCategories(res.data)).catch(() => { });
+    categoriesApi
+      .list({ limit: 200 })
+      .then((res) => setCategories(res.data))
+      .catch(() => {});
   }, []);
 
   useEffect(() => {
@@ -53,27 +64,57 @@ export default function SubcategoriesList() {
 
   const filtered = rows.filter(
     (s) =>
-      (!search ||
-        s.name.toLowerCase().includes(search.toLowerCase())) &&
-      (!categoryId || String(s.categoryId) === String(categoryId))
+      (!search || s.name.toLowerCase().includes(search.toLowerCase())) &&
+      (!categoryId || String(s.categoryId) === String(categoryId)),
   );
   const totalPages = Math.ceil(filtered.length / ITEMS_PER_PAGE);
 
   const paginatedRows = filtered.slice(
     (page - 1) * ITEMS_PER_PAGE,
-    page * ITEMS_PER_PAGE
+    page * ITEMS_PER_PAGE,
   );
 
   const handleDelete = async () => {
-    await subcategoriesApi.remove(deleting.id).then(() => {
-      toast.success('Subcategory deleted');
+    await subcategoriesApi
+      .remove(deleting.id)
+      .then(() => {
+        toast.success("Subcategory deleted");
+        load();
+      })
+      .catch((err) => toast.error(err.message));
+  };
+
+  const handleStatusUpdate = async (category) => {
+    if (!category) return;
+
+    const newStatus = category.status === "active" ? "inactive" : "active";
+
+    try {
+      await updateSubCategoryStatus(category.id, newStatus);
+
+      toast.success(
+        `Category ${newStatus === "active" ? "activated" : "deactivated"}`,
+      );
+
       load();
-    }).catch((err) => toast.error(err.message));
+    } catch (err) {
+      toast.error(
+        err.response?.data?.message ||
+          err.message ||
+          "Failed to update category status",
+      );
+    }
   };
 
   return (
     <>
-      <Topbar eyebrow="Catalogue" title="Subcategories" search={search} onSearchChange={setSearch} searchPlaceholder="Search subcategories…" />
+      <Topbar
+        eyebrow="Catalogue"
+        title="Subcategories"
+        search={search}
+        onSearchChange={setSearch}
+        searchPlaceholder="Search subcategories…"
+      />
       <div className="page">
         <div className="page-header">
           <div>
@@ -81,7 +122,13 @@ export default function SubcategoriesList() {
             <p>{rows.length} subcategories across your categories</p>
           </div>
           <div className="page-header-actions">
-            <button className="btn btn-gold" onClick={() => { setEditing(null); setShowForm(true); }}>
+            <button
+              className="btn btn-gold"
+              onClick={() => {
+                setEditing(null);
+                setShowForm(true);
+              }}
+            >
               <IconPlus /> Add subcategory
             </button>
           </div>
@@ -90,9 +137,20 @@ export default function SubcategoriesList() {
         <div className="table-wrap">
           <div className="table-toolbar">
             <div className="table-toolbar-filters">
-              <select className="filter-select" value={categoryId} onChange={(e) => { setCategoryId(e.target.value); setPage(1); }}>
+              <select
+                className="filter-select"
+                value={categoryId}
+                onChange={(e) => {
+                  setCategoryId(e.target.value);
+                  setPage(1);
+                }}
+              >
                 <option value="">All categories</option>
-                {categories.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
+                {categories.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.name}
+                  </option>
+                ))}
               </select>
             </div>
           </div>
@@ -104,7 +162,17 @@ export default function SubcategoriesList() {
               icon={IconLayers}
               title="No subcategories yet"
               message="Use subcategories to add finer distinctions within a category, like weave or region."
-              action={<button className="btn btn-gold btn-sm" onClick={() => { setEditing(null); setShowForm(true); }}><IconPlus /> Add subcategory</button>}
+              action={
+                <button
+                  className="btn btn-gold btn-sm"
+                  onClick={() => {
+                    setEditing(null);
+                    setShowForm(true);
+                  }}
+                >
+                  <IconPlus /> Add subcategory
+                </button>
+              }
             />
           ) : (
             <div className="table-scroll">
@@ -114,7 +182,7 @@ export default function SubcategoriesList() {
                     <th>Subcategory</th>
                     <th>Parent category</th>
                     <th>Collection</th>
-                    <th>Description</th>
+                    {/* <th>Description</th> */}
                     <th>Status</th>
                     <th></th>
                   </tr>
@@ -123,14 +191,53 @@ export default function SubcategoriesList() {
                   {paginatedRows.map((s) => (
                     <tr key={s.id}>
                       <td className="cell-primary">{s.name}</td>
-                      <td className="cell-muted">{s.category?.name || '—'}</td>
-                      <td className="cell-muted">{s.category?.collection || '—'}</td>
-                      <td className="cell-muted">{s.description || '—'}</td>
-                      <td><Badge value={s.status === 'active' ? 'active' : 'inactive'} label={s.status === 'active' ? 'Active' : 'Inactive'} /></td>
+                      <td className="cell-muted">{s.category?.name || "—"}</td>
+                      <td className="cell-muted">
+                        {s.category?.collection || "—"}
+                      </td>
+                      {/* <td className="cell-muted">{s.description || '—'}</td> */}
+                      <td>
+                        <Badge
+                          value={s.status === "active" ? "active" : "inactive"}
+                          label={s.status === "active" ? "Active" : "Inactive"}
+                        />
+                      </td>
                       <td>
                         <div className="row-actions">
-                          <button className="icon-btn" onClick={() => { setEditing(s); setShowForm(true); }} aria-label="Edit"><IconEdit /></button>
-                          <button className="icon-btn danger" onClick={() => setDeleting(s)} aria-label="Delete"><IconTrash /></button>
+                          <button
+                            type="button"
+                            className="icon-btn"
+                            onClick={() => handleStatusUpdate(s)}
+                            aria-label={
+                              s.status === "active"
+                                ? "Deactivate category"
+                                : "Activate category"
+                            }
+                            title={
+                              s.status === "active"
+                                ? "Deactivate category"
+                                : "Activate category"
+                            }
+                          >
+                            {s.status === "active" ? "⏸" : "▶"}
+                          </button>
+                          <button
+                            className="icon-btn"
+                            onClick={() => {
+                              setEditing(s);
+                              setShowForm(true);
+                            }}
+                            aria-label="Edit"
+                          >
+                            <IconEdit />
+                          </button>
+                          <button
+                            className="icon-btn danger"
+                            onClick={() => setDeleting(s)}
+                            aria-label="Delete"
+                          >
+                            <IconTrash />
+                          </button>
                         </div>
                       </td>
                     </tr>
@@ -151,12 +258,9 @@ export default function SubcategoriesList() {
           >
             <div style={{ fontSize: 13, color: "var(--text-muted)" }}>
               Showing{" "}
-              {filtered.length === 0
-                ? 0
-                : (page - 1) * ITEMS_PER_PAGE + 1}{" "}
-              to{" "}
-              {Math.min(page * ITEMS_PER_PAGE, filtered.length)}{" "}
-              of {filtered.length} subcategories
+              {filtered.length === 0 ? 0 : (page - 1) * ITEMS_PER_PAGE + 1} to{" "}
+              {Math.min(page * ITEMS_PER_PAGE, filtered.length)} of{" "}
+              {filtered.length} subcategories
             </div>
 
             {totalPages > 1 && (
@@ -191,7 +295,10 @@ export default function SubcategoriesList() {
           subcategory={editing}
           categories={categories}
           onClose={() => setShowForm(false)}
-          onSaved={() => { setShowForm(false); load(); }}
+          onSaved={() => {
+            setShowForm(false);
+            load();
+          }}
         />
       )}
       {deleting && (

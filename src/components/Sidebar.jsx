@@ -1,45 +1,50 @@
-import React from 'react';
-import { NavLink } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext.jsx';
-import { useSidebar } from '../context/SidebarContext.jsx';
+import React from "react";
+import { NavLink } from "react-router-dom";
+import { useAuth } from "../context/AuthContext.jsx";
+import { useSidebar } from "../context/SidebarContext.jsx";
 import {
-  IconDashboard, IconProducts, IconCategory, IconLayers,
-  IconOrders, IconUsers, IconLogout, IconClose
-} from './icons.jsx';
+  IconDashboard,
+  IconProducts,
+  IconCategory,
+  IconLayers,
+  IconOrders,
+  IconUsers,
+  IconLogout,
+  IconClose,
+} from "./icons.jsx";
 
 const navGroups = [
   {
-    label: 'Overview',
-    items: [{ to: '/', label: 'Dashboard', icon: IconDashboard, end: true }]
+    label: "Overview",
+    items: [{ to: "/", label: "Dashboard", icon: IconDashboard, end: true }],
   },
   {
-    label: 'Catalogue',
+    label: "Catalogue",
     items: [
-      { to: '/products', label: 'Products', icon: IconProducts },
-      { to: '/categories', label: 'Categories', icon: IconCategory },
-      { to: '/subcategories', label: 'Subcategories', icon: IconLayers },
-      { to: '/looms', label: 'Direct-from-Loom', icon: IconProducts }
-    ]
+      { to: "/products", label: "Products", icon: IconProducts },
+      { to: "/categories", label: "Categories", icon: IconCategory },
+      { to: "/subcategories", label: "Subcategories", icon: IconLayers },
+      { to: "/looms", label: "Direct-from-Loom", icon: IconProducts },
+      { to: "/new-arrivals", label: "New Arrivals", icon: IconProducts },
+    ],
   },
   {
-    label: 'Sales',
+    label: "Sales",
     items: [
-      { to: '/orders', label: 'Orders', icon: IconOrders },
-      { to: '/customers', label: 'Customers', icon: IconUsers }
-    ]
+      { to: "/orders", label: "Orders", icon: IconOrders },
+      { to: "/customers", label: "Customers", icon: IconUsers },
+    ],
   },
   {
-    label: 'Support',
+    label: "Support",
     items: [
-      { to: '/service-requests', label: 'Service Requests', icon: IconOrders }
-    ]
+      { to: "/service-requests", label: "Service Requests", icon: IconOrders },
+    ],
   },
   {
-    label: 'Admin',
-    items: [
-      { to: '/users', label: 'Admin Users', icon: IconUsers }
-    ]
-  }
+    label: "Admin",
+    items: [{ to: "/users", label: "Admin Users", icon: IconUsers }],
+  },
 ];
 
 function BrandMark(props) {
@@ -59,7 +64,7 @@ export default function Sidebar() {
   const { open, close } = useSidebar();
 
   return (
-    <aside className={`sidebar${open ? ' open' : ''}`}>
+    <aside className={`sidebar${open ? " open" : ""}`}>
       <div className="sidebar-brand">
         <BrandMark className="sidebar-mark" />
         <div className="sidebar-brand-text">
@@ -81,7 +86,9 @@ export default function Sidebar() {
                 key={to}
                 to={to}
                 end={end}
-                className={({ isActive }) => `sidebar-link${isActive ? ' active' : ''}`}
+                className={({ isActive }) =>
+                  `sidebar-link${isActive ? " active" : ""}`
+                }
               >
                 <Icon />
                 <span>{label}</span>
@@ -94,10 +101,12 @@ export default function Sidebar() {
       <div className="sidebar-footer">
         <div className="sidebar-user">
           <div className="sidebar-user-avatar">
-            {(session?.email || 'A').slice(0, 1).toUpperCase()}
+            {(session?.email || "A").slice(0, 1).toUpperCase()}
           </div>
           <div className="sidebar-user-info">
-            <div className="u-name">{session?.email?.split('@')[0] || 'Admin'}</div>
+            <div className="u-name">
+              {session?.email?.split("@")[0] || "Admin"}
+            </div>
             <div className="u-role">Store administrator</div>
           </div>
           <button className="sidebar-logout" title="Sign out" onClick={logout}>

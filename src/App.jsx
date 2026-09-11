@@ -1,24 +1,25 @@
-import React from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider } from './context/AuthContext.jsx';
-import { ToastProvider } from './context/ToastContext.jsx';
-import { DataProvider } from './context/DataContext.jsx';
-import AppLayout from './components/AppLayout.jsx';
+import React from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
+import { AuthProvider } from "./context/AuthContext.jsx";
+import { ToastProvider } from "./context/ToastContext.jsx";
+import { DataProvider } from "./context/DataContext.jsx";
+import AppLayout from "./components/AppLayout.jsx";
 
-import Login from './pages/Login.jsx';
-import Dashboard from './pages/Dashboard.jsx';
-import ProductsList from './pages/Products/ProductsList.jsx';
-import ProductDetail from './pages/Products/ProductDetail.jsx';
-import CategoriesList from './pages/Categories/CategoriesList.jsx';
-import SubcategoriesList from './pages/Subcategories/SubcategoriesList.jsx';
-import OrdersList from './pages/Orders/OrdersList.jsx';
-import OrderDetail from './pages/Orders/OrderDetail.jsx';
-import UsersList from './pages/Users/UsersList.jsx';
-import UserDetail from './pages/Users/UserDetail.jsx';
-import LoomsList from './pages/Looms/LoomsList.jsx';
-import CustomersList from './pages/Customers/CustomersList.jsx';
-import ServiceRequestsList from './pages/ServiceRequests/ServiceRequestsList.jsx';
-import CustomerDetail from './pages/Customers/CustomerDetail.jsx';
+import Login from "./pages/Login.jsx";
+import Dashboard from "./pages/Dashboard.jsx";
+import ProductsList from "./pages/Products/ProductsList.jsx";
+import ProductDetail from "./pages/Products/ProductDetail.jsx";
+import CategoriesList from "./pages/Categories/CategoriesList.jsx";
+import SubcategoriesList from "./pages/Subcategories/SubcategoriesList.jsx";
+import OrdersList from "./pages/Orders/OrdersList.jsx";
+import OrderDetail from "./pages/Orders/OrderDetail.jsx";
+import UsersList from "./pages/Users/UsersList.jsx";
+import UserDetail from "./pages/Users/UserDetail.jsx";
+import LoomsList from "./pages/Looms/LoomsList.jsx";
+import CustomersList from "./pages/Customers/CustomersList.jsx";
+import ServiceRequestsList from "./pages/ServiceRequests/ServiceRequestsList.jsx";
+import CustomerDetail from "./pages/Customers/CustomerDetail.jsx";
+import NewArrivalsList from "./pages/NewArrivals/NewArrivalsList.jsx";
 
 export default function App() {
   return (
@@ -40,9 +41,13 @@ export default function App() {
               <Route path="/users" element={<UsersList />} />
               <Route path="/users/:id" element={<UserDetail />} />
               <Route path="/looms" element={<LoomsList />} />
+              <Route path="/new-arrivals" element={<NewArrivalsList />} />
               <Route path="/customers" element={<CustomersList />} />
               <Route path="/customers/:id" element={<CustomerDetail />} />
-              <Route path="/service-requests" element={<ServiceRequestsList />} />
+              <Route
+                path="/service-requests"
+                element={<ServiceRequestsList />}
+              />
             </Route>
 
             <Route path="*" element={<Navigate to="/" replace />} />

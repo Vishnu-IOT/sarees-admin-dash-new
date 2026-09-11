@@ -1,13 +1,20 @@
-import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
-import { useAuth } from './AuthContext.jsx';
-import * as categoriesApi from '../api/categories';
-import * as subcategoriesApi from '../api/subcategories';
-import * as productsApi from '../api/products';
-import * as ordersApi from '../api/orders';
-import * as loomsApi from '../api/looms';
-import * as usersApi from '../api/users';
-import * as customersApi from '../api/customers';
-import * as serviceRequestsApi from '../api/serviceRequests';
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  useCallback,
+} from "react";
+import { useAuth } from "./AuthContext.jsx";
+import * as categoriesApi from "../api/categories";
+import * as subcategoriesApi from "../api/subcategories";
+import * as productsApi from "../api/products";
+import * as ordersApi from "../api/orders";
+import * as loomsApi from "../api/looms";
+import * as usersApi from "../api/users";
+import * as customersApi from "../api/customers";
+import * as serviceRequestsApi from "../api/serviceRequests";
+import { newArrivalsApi } from "../api/newArrivals.js";
 
 const DataContext = createContext(null);
 
@@ -19,20 +26,34 @@ export function DataProvider({ children }) {
   const [subcategories, setSubcategories] = useState([]);
   const [products, setProducts] = useState([]);
   const [pageProducts, setPageProducts] = useState([]);
-  const [productsCollection, setProductsCollection] = useState('ALL'); // ALL | SAREE | JEWEL
+  const [productsCollection, setProductsCollection] = useState("ALL"); // ALL | SAREE | JEWEL
   const [orders, setOrders] = useState([]);
-  const [ordersMeta, setOrdersMeta] = useState({ currentPage: 1, totalPages: 1, totalOrders: 0 });
+  const [ordersMeta, setOrdersMeta] = useState({
+    currentPage: 1,
+    totalPages: 1,
+    totalOrders: 0,
+  });
   const [looms, setLooms] = useState([]);
+  const [newArrivals, setNewArrivals] = useState([]);
   const [users, setUsers] = useState([]);
   const [customers, setCustomers] = useState([]);
-  const [customersMeta, setCustomersMeta] = useState({ currentPage: 1, totalPages: 1, totalCustomers: 0 });
+  const [customersMeta, setCustomersMeta] = useState({
+    currentPage: 1,
+    totalPages: 1,
+    totalCustomers: 0,
+  });
   const [serviceRequests, setServiceRequests] = useState([]);
-  const [serviceRequestsMeta, setServiceRequestsMeta] = useState({ currentPage: 1, totalPages: 1, total: 0 });
+  const [serviceRequestsMeta, setServiceRequestsMeta] = useState({
+    currentPage: 1,
+    totalPages: 1,
+    total: 0,
+  });
 
   const [categoriesLoading, setCategoriesLoading] = useState(true);
   const [productsLoading, setProductsLoading] = useState(true);
   const [ordersLoading, setOrdersLoading] = useState(true);
   const [loomsLoading, setLoomsLoading] = useState(true);
+  const [newArrivalsLoading, setNewArrivalsLoading] = useState(true);
   const [usersLoading, setUsersLoading] = useState(true);
   const [customersLoading, setCustomersLoading] = useState(true);
   const [serviceRequestsLoading, setServiceRequestsLoading] = useState(true);
@@ -43,7 +64,7 @@ export function DataProvider({ children }) {
       const data = await categoriesApi.getCategories();
       setCategories(data);
     } catch (err) {
-      console.error('Categories fetch error:', err);
+      console.error("Categories fetch error:", err);
       setCategories([]);
     } finally {
       setCategoriesLoading(false);
@@ -55,31 +76,39 @@ export function DataProvider({ children }) {
       const data = await subcategoriesApi.getSubCategories();
       setSubcategories(data);
     } catch (err) {
-      console.error('Subcategories fetch error:', err);
+      console.error("Subcategories fetch error:", err);
       setSubcategories([]);
     }
   }, []);
 
-  const fetchProducts = useCallback(async (page = 1, limit = 10, collection = 'ALL') => {
-    setProductsLoading(true);
-    setProductsCollection(collection);
-    try {
-      const data = await productsApi.getProductsByCollection(collection, page, limit);
-      setProducts(data.products || []);
-      setPageProducts(data || []);
-    } catch (err) {
-      console.error('Products fetch error:', err);
-      setProducts([]);
-    } finally {
-      setProductsLoading(false);
-    }
-  }, []);
+  const fetchProducts = useCallback(
+    async (page = 1, limit = 10, collection = "ALL") => {
+      setProductsLoading(true);
+      setProductsCollection(collection);
+      try {
+        const data = await productsApi.getProductsByCollection(
+          collection,
+          page,
+          limit,
+        );
+        setProducts(data.products || []);
+        setPageProducts(data || []);
+      } catch (err) {
+        console.error("Products fetch error:", err);
+        setProducts([]);
+      } finally {
+        setProductsLoading(false);
+      }
+    },
+    [],
+  );
 
   const fetchOrders = useCallback(async (params = {}) => {
     setOrdersLoading(true);
     try {
       const data = await ordersApi.getOrders(params);
-      const rows = data.data || data.orders || (Array.isArray(data) ? data : []);
+      const rows =
+        data.data || data.orders || (Array.isArray(data) ? data : []);
       setOrders(rows);
       setOrdersMeta({
         currentPage: data.currentPage || 1,
@@ -87,7 +116,7 @@ export function DataProvider({ children }) {
         totalOrders: data.totalOrders || rows.length,
       });
     } catch (err) {
-      console.error('Orders fetch error:', err);
+      console.error("Orders fetch error:", err);
       setOrders([]);
     } finally {
       setOrdersLoading(false);
@@ -100,9 +129,23 @@ export function DataProvider({ children }) {
       const data = await loomsApi.getLooms();
       setLooms(data || []);
     } catch (err) {
-      console.error('Failed to fetch looms', err);
+      console.error("Failed to fetch looms", err);
     } finally {
       setLoomsLoading(false);
+    }
+  }, []);
+
+  const fetchNewArrivals = useCallback(async () => {
+    setNewArrivalsLoading(true);
+
+    try {
+      const data = await newArrivalsApi.list();
+      setNewArrivals(data || []);
+    } catch (err) {
+      console.error("Failed to fetch new arrivals", err);
+      setNewArrivals([]);
+    } finally {
+      setNewArrivalsLoading(false);
     }
   }, []);
 
@@ -112,7 +155,7 @@ export function DataProvider({ children }) {
       const data = await usersApi.getUsers();
       setUsers(data || []);
     } catch (err) {
-      console.error('Failed to fetch users', err);
+      console.error("Failed to fetch users", err);
     } finally {
       setUsersLoading(false);
     }
@@ -129,7 +172,7 @@ export function DataProvider({ children }) {
         totalCustomers: data.totalCustomers || 0,
       });
     } catch (err) {
-      console.error('Failed to fetch customers', err);
+      console.error("Failed to fetch customers", err);
       setCustomers([]);
     } finally {
       setCustomersLoading(false);
@@ -140,7 +183,8 @@ export function DataProvider({ children }) {
     setServiceRequestsLoading(true);
     try {
       const data = await serviceRequestsApi.getServiceRequests(params);
-      const rows = data.data || data.requests || (Array.isArray(data) ? data : []);
+      const rows =
+        data.data || data.requests || (Array.isArray(data) ? data : []);
       setServiceRequests(rows);
       setServiceRequestsMeta({
         currentPage: data.currentPage || 1,
@@ -148,7 +192,7 @@ export function DataProvider({ children }) {
         total: data.total || rows.length,
       });
     } catch (err) {
-      console.error('Service requests fetch error:', err);
+      console.error("Service requests fetch error:", err);
       setServiceRequests([]);
     } finally {
       setServiceRequestsLoading(false);
@@ -162,9 +206,20 @@ export function DataProvider({ children }) {
     fetchProducts();
     fetchOrders();
     fetchLooms();
+    fetchNewArrivals();
     fetchUsers();
     fetchCustomers();
-  }, [isAuthenticated, fetchCategories, fetchSubcategories, fetchProducts, fetchOrders, fetchLooms, fetchUsers, fetchCustomers]);
+  }, [
+    isAuthenticated,
+    fetchCategories,
+    fetchSubcategories,
+    fetchProducts,
+    fetchOrders,
+    fetchLooms,
+    fetchNewArrivals,
+    fetchUsers,
+    fetchCustomers,
+  ]);
 
   // ---------- Categories ----------
   const addCategory = useCallback(
@@ -173,7 +228,7 @@ export function DataProvider({ children }) {
       await fetchCategories();
       return res;
     },
-    [fetchCategories]
+    [fetchCategories],
   );
 
   const editCategory = useCallback(
@@ -182,7 +237,7 @@ export function DataProvider({ children }) {
       await fetchCategories();
       return res;
     },
-    [fetchCategories]
+    [fetchCategories],
   );
 
   const removeCategory = useCallback(
@@ -191,7 +246,7 @@ export function DataProvider({ children }) {
       await fetchCategories();
       await fetchSubcategories();
     },
-    [fetchCategories, fetchSubcategories]
+    [fetchCategories, fetchSubcategories],
   );
 
   // ---------- Sub-categories ----------
@@ -201,7 +256,7 @@ export function DataProvider({ children }) {
       await fetchSubcategories();
       return res;
     },
-    [fetchSubcategories]
+    [fetchSubcategories],
   );
 
   const editSubCategory = useCallback(
@@ -210,7 +265,7 @@ export function DataProvider({ children }) {
       await fetchSubcategories();
       return res;
     },
-    [fetchSubcategories]
+    [fetchSubcategories],
   );
 
   const removeSubCategory = useCallback(
@@ -218,7 +273,7 @@ export function DataProvider({ children }) {
       await subcategoriesApi.deleteSubCategory(id);
       await fetchSubcategories();
     },
-    [fetchSubcategories]
+    [fetchSubcategories],
   );
 
   // ---------- Products ----------
@@ -229,7 +284,7 @@ export function DataProvider({ children }) {
       await fetchLooms();
       return res;
     },
-    [fetchProducts, fetchLooms, productsCollection]
+    [fetchProducts, fetchLooms, productsCollection],
   );
 
   const editProduct = useCallback(
@@ -239,7 +294,7 @@ export function DataProvider({ children }) {
       await fetchLooms();
       return res;
     },
-    [fetchProducts, fetchLooms, productsCollection]
+    [fetchProducts, fetchLooms, productsCollection],
   );
 
   const removeProduct = useCallback(
@@ -248,7 +303,7 @@ export function DataProvider({ children }) {
       await fetchProducts(1, 10, productsCollection);
       await fetchLooms();
     },
-    [fetchProducts, fetchLooms, productsCollection]
+    [fetchProducts, fetchLooms, productsCollection],
   );
 
   // ---------- Orders ----------
@@ -258,7 +313,7 @@ export function DataProvider({ children }) {
       await fetchOrders();
       return res;
     },
-    [fetchOrders]
+    [fetchOrders],
   );
 
   // ---------- Looms (Direct-from-Loom product tagging) ----------
@@ -269,7 +324,7 @@ export function DataProvider({ children }) {
       await fetchProducts(1, 10, productsCollection);
       return res;
     },
-    [fetchLooms, fetchProducts, productsCollection]
+    [fetchLooms, fetchProducts, productsCollection],
   );
 
   const removeLoom = useCallback(
@@ -278,7 +333,32 @@ export function DataProvider({ children }) {
       await fetchLooms();
       await fetchProducts(1, 10, productsCollection);
     },
-    [fetchLooms, fetchProducts, productsCollection]
+    [fetchLooms, fetchProducts, productsCollection],
+  );
+
+  // ---------- New Arrivals ----------
+  const addToNewArrival = useCallback(
+    async (productId) => {
+      const res = await newArrivalsApi.add(productId);
+
+      await fetchNewArrivals();
+      await fetchProducts(1, 10, productsCollection);
+
+      return res;
+    },
+    [fetchNewArrivals, fetchProducts, productsCollection],
+  );
+
+  const removeNewArrival = useCallback(
+    async (productId) => {
+      const res = await newArrivalsApi.remove(productId);
+
+      await fetchNewArrivals();
+      await fetchProducts(1, 10, productsCollection);
+
+      return res;
+    },
+    [fetchNewArrivals, fetchProducts, productsCollection],
   );
 
   // ---------- Users (Admin Dashboard Users) ----------
@@ -288,7 +368,7 @@ export function DataProvider({ children }) {
       await fetchUsers();
       return res;
     },
-    [fetchUsers]
+    [fetchUsers],
   );
 
   const editUser = useCallback(
@@ -297,7 +377,7 @@ export function DataProvider({ children }) {
       await fetchUsers();
       return res;
     },
-    [fetchUsers]
+    [fetchUsers],
   );
 
   const removeUser = useCallback(
@@ -305,7 +385,7 @@ export function DataProvider({ children }) {
       await usersApi.deleteUser(id);
       await fetchUsers();
     },
-    [fetchUsers]
+    [fetchUsers],
   );
 
   // ---------- Service Requests ----------
@@ -315,7 +395,7 @@ export function DataProvider({ children }) {
       await fetchServiceRequests();
       return res;
     },
-    [fetchServiceRequests]
+    [fetchServiceRequests],
   );
 
   const editServiceRequest = useCallback(
@@ -324,16 +404,19 @@ export function DataProvider({ children }) {
       await fetchServiceRequests();
       return res;
     },
-    [fetchServiceRequests]
+    [fetchServiceRequests],
   );
 
   const updateServiceRequestStatus = useCallback(
     async (id, payload) => {
-      const res = await serviceRequestsApi.updateServiceRequestStatus(id, payload);
+      const res = await serviceRequestsApi.updateServiceRequestStatus(
+        id,
+        payload,
+      );
       await fetchServiceRequests();
       return res;
     },
-    [fetchServiceRequests]
+    [fetchServiceRequests],
   );
 
   const removeServiceRequest = useCallback(
@@ -341,7 +424,7 @@ export function DataProvider({ children }) {
       await serviceRequestsApi.deleteServiceRequest(id);
       await fetchServiceRequests();
     },
-    [fetchServiceRequests]
+    [fetchServiceRequests],
   );
 
   const value = {
@@ -383,6 +466,13 @@ export function DataProvider({ children }) {
     removeLoom,
     fetchLooms,
 
+    // New Arrivals
+    newArrivals,
+    newArrivalsLoading,
+    addToNewArrival,
+    removeNewArrival,
+    fetchNewArrivals,
+
     // Users
     users,
     usersLoading,
@@ -414,7 +504,7 @@ export function DataProvider({ children }) {
 export function useData() {
   const ctx = useContext(DataContext);
   if (!ctx) {
-    throw new Error('useData must be used within a DataProvider');
+    throw new Error("useData must be used within a DataProvider");
   }
   return ctx;
 }

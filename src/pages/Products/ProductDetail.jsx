@@ -120,6 +120,7 @@ export default function ProductDetail() {
     const displayOfferPrice = selectedAttribute?.offerPrice || product.offerPrice;
     const displayDiscount = selectedAttribute?.discount || product.discount;
     const displayQuantity = selectedAttribute?.quantity ?? 0;
+    console.log(selectedAttribute?.image_url);
 
     // 🏷️ Get attributes to display based on collection
     const attributeFields = getAttributeFields(product.collection);
