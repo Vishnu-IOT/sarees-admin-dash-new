@@ -130,8 +130,6 @@ export default function Dashboard() {
     return { label, value: count };
   });
 
-  console.log("Bar Data:", barData);
-
   // Order status breakdown
   const statusCounts = {};
   orders.forEach((o) => {
