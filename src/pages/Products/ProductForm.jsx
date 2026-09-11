@@ -561,7 +561,7 @@ export default function ProductForm({
           />
         </div>
 
-        <div className="field-row-3">
+        {/* <div className="field-row-3">
           <div className="field">
             <label>Price (₹) </label>
             <input
@@ -596,7 +596,7 @@ export default function ProductForm({
               readOnly
             />
           </div>
-        </div>
+        </div> */}
 
         <div className="field-row">
           <div className="checkbox-row">

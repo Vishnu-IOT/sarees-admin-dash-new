@@ -69,14 +69,14 @@ export default function SubcategoryForm({ subcategory, categories, onClose, onSa
           <input value={form.name} onChange={(e) => update('name', e.target.value)} placeholder="e.g. Kanjivaram" />
           {errors.name && <span className="field-error">{errors.name}</span>}
         </div>
-        <div className="field">
+        {/* <div className="field">
           <label>Description</label>
           <textarea value={form.description} onChange={(e) => update('description', e.target.value)} />
         </div>
         <div className="field">
           <label>Image URL</label>
           <input value={form.image} onChange={(e) => update('image', e.target.value)} placeholder="https://…" />
-        </div>
+        </div> */}
         <div className="field">
           <div className="checkbox-row">
             <input
