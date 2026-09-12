@@ -178,12 +178,12 @@ export default function ProductDetail() {
                                 <p className="product-detail-sku">SKU: {selectedAttribute?.sku || product.id}</p>
                             </div>
                             <div className="product-detail-actions">
-                                <button className="icon-btn" title="Add to favorites" aria-label="Favorite">
+                                {/* <button className="icon-btn" title="Add to favorites" aria-label="Favorite">
                                     <IconHeart />
                                 </button>
                                 <button className="icon-btn" title="Share" aria-label="Share">
                                     <IconShare2 />
-                                </button>
+                                </button> */}
                                 <button className="icon-btn" onClick={handleEdit} title="Edit" aria-label="Edit">
                                     <IconEdit />
                                 </button>

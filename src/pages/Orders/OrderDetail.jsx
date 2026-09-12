@@ -131,9 +131,9 @@ export default function OrderDetail() {
           <div className="page-header-actions">
             <Badge value={order.status} />
             <Badge value={order.paymentStatus} />
-            <button className="icon-btn danger" onClick={() => setConfirmDelete(true)} aria-label="Delete order">
+            {/* <button className="icon-btn danger" onClick={() => setConfirmDelete(true)} aria-label="Delete order">
               <IconTrash />
-            </button>
+            </button> */}
           </div>
         </div>
 
