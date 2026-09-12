@@ -187,7 +187,7 @@ export default function ProductsList() {
                       <td>
                         <div className="row-thumb">
                           <ImageThumb
-                            src={p.attributes[0].image_url}
+                            src={p.image_url || p.attributes[0].image_url}
                             alt={p.name}
                           />
                           <div>
@@ -220,10 +220,8 @@ export default function ProductsList() {
                       <td className="cell-mono">{p.attributes[0].sku}</td>
                       <td className="cell-muted">{p.category?.name || "—"}</td>
                       <td className="cell-primary">
-                        {formatCurrency(
-                          p.attributes[0].offerPrice || p.attributes[0].price,
-                        )}
-                        {p.attributes[0].offerPrice && (
+                        {formatCurrency(p.offerPrice || p.price)}
+                        {p.offerPrice && (
                           <div
                             className="cell-muted"
                             style={{

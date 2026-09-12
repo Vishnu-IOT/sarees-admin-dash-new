@@ -254,9 +254,17 @@ export default function ProductForm({
     setError("");
 
     if (!form.name.trim()) return setError("Product name is required");
-    // if (!form.price) return setError('Price is required');
-    // if (!form.offerPrice) return setError('Offer Price is required');
+    if (!form.price) return setError("Price is required");
+    if (!form.offerPrice) return setError("Offer Price is required");
     if (!form.categoryId) return setError("Category is required");
+
+    if (!isEdit && !form.imageFile) {
+      return setError("Main image is required");
+    }
+
+    if (isEdit && !form.imageFile && !form.image_url) {
+      return setError("Main image is required");
+    }
     const hasInvalidPrice = variants.some(
       (v) => !v.price || Number(v.price) <= 0,
     );
@@ -561,9 +569,11 @@ export default function ProductForm({
           />
         </div>
 
-        {/* <div className="field-row-3">
+        <div className="field-row-3">
           <div className="field">
-            <label>Price (₹) </label>
+            <label>
+              Price (₹) <span className="hint">*</span>
+            </label>
             <input
               name="price"
               type="number"
@@ -574,7 +584,9 @@ export default function ProductForm({
             />
           </div>
           <div className="field">
-            <label>Offer price (₹)</label>
+            <label>
+              Offer price (₹) <span className="hint">*</span>
+            </label>
             <input
               name="offerPrice"
               type="number"
@@ -585,7 +597,9 @@ export default function ProductForm({
             />
           </div>
           <div className="field">
-            <label>Discount (%)</label>
+            <label>
+              Discount (%) <span className="hint">*</span>
+            </label>
             <input
               name="discount"
               type="number"
@@ -596,7 +610,7 @@ export default function ProductForm({
               readOnly
             />
           </div>
-        </div> */}
+        </div>
 
         <div className="field-row">
           <div className="checkbox-row">
@@ -638,7 +652,9 @@ export default function ProductForm({
         </div>
 
         <div className="field">
-          <label>Main image (Optional)</label>
+          <label>
+            Main image <span className="hint">*</span>
+          </label>
           {isEdit && form.image_url && !form.imageFile && (
             <img
               src={form.image_url}
